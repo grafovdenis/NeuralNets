@@ -109,6 +109,7 @@ for i in range(pointNumber):
     xCoordinates.append(x)
     yCoordinates.append(y)
 
+# triangle
 for i in range(pointNumber):
     x = rand.uniform(0, 2)
     y = rand.uniform(0, 2)
@@ -124,5 +125,7 @@ plt.xlim(0, 2)
 plt.ylim(0, 2)
 
 plt.plot(xCoordinates, yCoordinates, '.')
+
+plt.savefig('../images/fourth.png')
 
 plt.show()

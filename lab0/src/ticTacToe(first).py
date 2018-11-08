@@ -24,4 +24,7 @@ while not isSeparable(matrix):
 print(matrix)
 
 plt.imshow(matrix, cmap='gray')
+
+plt.savefig('../images/first.png')
+
 plt.show()
