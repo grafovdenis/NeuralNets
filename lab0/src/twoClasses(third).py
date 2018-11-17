@@ -27,6 +27,6 @@ plt.ylim(0, 1)
 
 plt.plot(xCoordinates, yCoordinates, '.')
 
-plt.savefig('../images/second.png')
+plt.savefig('../plots/second.png')
 
 plt.show()

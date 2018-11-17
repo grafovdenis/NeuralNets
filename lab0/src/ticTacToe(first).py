@@ -25,6 +25,6 @@ print(matrix)
 
 plt.imshow(matrix, cmap='gray')
 
-plt.savefig('../images/first.png')
+plt.savefig('../plots/first.png')
 
 plt.show()

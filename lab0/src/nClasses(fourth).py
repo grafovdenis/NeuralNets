@@ -126,6 +126,6 @@ plt.ylim(0, 2)
 
 plt.plot(xCoordinates, yCoordinates, '.')
 
-plt.savefig('../images/fourth.png')
+plt.savefig('../plots/fourth.png')
 
 plt.show()
