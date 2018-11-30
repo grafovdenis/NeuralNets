@@ -59,5 +59,5 @@ def transform_to_single_file(input_directory, output_file, resolution):
         if (index + 1) % rows == 0:
             cur_row += 1
     new_im.show()
-    new_im.save(os.path.join('../output/', output_file))
+    new_im.save(os.path.join('../output/', output_file + '.png'))
 
