@@ -1,32 +1,100 @@
+# Third dataset
+
 import matplotlib.pyplot as plt
 import random as rand
+import numpy as np
 
 
 def draw_rectangle(x, y, x1, y1, x2, y2):
     return (x1 < x < x2) & (y1 < y < y2)
 
 
-pointNumber = 1000
-xCoordinates = []
-yCoordinates = []
+def load_data(train_size=3000, show=False):
+    test_size = int(train_size * 0.2)
 
-for i in range(pointNumber):
-    x = rand.uniform(0, 1)
-    y = rand.uniform(0, 1)
-    while not draw_rectangle(x, y, 0.7, 0.2, 0.8, 0.8) | draw_rectangle(x, y, 0.1, 0.2, 0.2, 0.8) \
-              | draw_rectangle(x, y, 0.2, 0.4, 0.4, 0.6) | draw_rectangle(x, y, 0.4, 0.2, 0.5, 0.8):
+    x_train = np.empty(0)
+    y_train = np.empty(0)
+
+    x_test = np.empty(0)
+    y_test = np.empty(0)
+
+    # Zero class
+    x0_train = np.empty(0)
+    x0_test = np.empty(0)
+
+    # First class
+    x1_train = np.empty(0)
+    x1_test = np.empty(0)
+
+    for i in range(train_size + test_size):
         x = rand.uniform(0, 1)
         y = rand.uniform(0, 1)
-    xCoordinates.append(x)
-    yCoordinates.append(y)
+        if i < train_size:
+            x_train = np.append(x_train, (x, y))
+        else:
+            x_test = np.append(x_test, (x, y))
 
-xCoordinates = list(map(lambda x: x, xCoordinates))
-yCoordinates = list(map(lambda y: y, yCoordinates))
-plt.xlim(0, 1)
-plt.ylim(0, 1)
+        # Text
+        if not draw_rectangle(x, y, 0.7, 0.2, 0.8, 0.8) | draw_rectangle(x, y, 0.1, 0.2, 0.2, 0.8) \
+               | draw_rectangle(x, y, 0.2, 0.4, 0.4, 0.6) | draw_rectangle(x, y, 0.4, 0.2, 0.5, 0.8):
+            if i < train_size:
+                x0_train = np.append(x0_train, (x, y))
+                y_train = np.append(y_train, 1)
+            else:
+                x0_test = np.append(x0_test, (x, y))
+                y_test = np.append(y_test, 1)
+        else:
+            if i < train_size:
+                x1_train = np.append(x1_train, (x, y))
+                y_train = np.append(y_train, 0)
+            else:
+                x1_test = np.append(x1_test, (x, y))
+                y_test = np.append(y_test, 0)
 
-plt.plot(xCoordinates, yCoordinates, '.')
+    # Reshaping
+    x_train.shape = (train_size, 2)
+    x_test.shape = (test_size, 2)
 
-plt.savefig('../plots/second.png')
+    x0_train.shape = (int(x0_train.size / 2), 2)
+    x1_train.shape = (int(x1_train.size / 2), 2)
 
-plt.show()
+    x0_test.shape = (int(x0_test.size / 2), 2)
+    x1_test.shape = (int(x1_test.size / 2), 2)
+
+    # Plotting train
+    plt.xlim(0, 1)
+    plt.ylim(0, 1)
+    plt.title("train data")
+    plt.plot(x0_train.transpose()[0], x0_train.transpose()[1], '.')
+    plt.plot(x1_train.transpose()[0], x1_train.transpose()[1], '.')
+
+    plt.legend(('0 class', '1 class'), loc='upper right', shadow=True)
+
+    plt.savefig('../plots/third.png')
+    if show:
+        plt.show()
+
+    plt.close()
+
+    # Plotting test
+    plt.xlim(0, 1)
+    plt.ylim(0, 1)
+    plt.title("test data")
+    plt.plot(x0_test.transpose()[0], x0_test.transpose()[1], '.')
+    plt.plot(x1_test.transpose()[0], x1_test.transpose()[1], '.')
+
+    plt.legend(('0 class', '1 class'), loc='upper right', shadow=True)
+
+    if show:
+        plt.show()
+
+    return (x_train, y_train), (x_test, y_test)
+
+
+# ---------------------------
+
+(x_train, y_train), (x_test, y_test) = load_data(train_size=8000, show=True)
+print(x_train.shape)
+print(y_train.shape)
+print(x_test.shape)
+print(y_test.shape)
