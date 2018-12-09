@@ -5,10 +5,16 @@ import numpy as np
 
 # Displays squares of numbers between 0 and 31
 def func(x1: int, x2: int, x3: int, x4: int, x5: int):
+    """
+    ~x1 & ~x2 & ~x3 & ~x4 & x5  |
+    ~x1 & ~x2 & x3 & ~x4 & ~x5  |
+    x1 & ~x2 & ~x3 & ~x4 & ~x5  |
+    x2 & ~x3 & ~x4 & x5
+    """
     return (not x1) & (not x2) & (not x3) & (not x4) & x5 \
            | (not x1) & (not x2) & x3 & (not x4) & (not x5) \
            | x1 & (not x2) & (not x3) & (not x4) & (not x5) \
-           | x2 & (not x3) & (not x4) & x5 | x1 & x2 & (not x3) & (not x4) & x5
+           | x2 & (not x3) & (not x4) & x5
 
 
 def load_data():
@@ -27,6 +33,8 @@ def load_data():
 
 (x_train, y_train) = load_data()
 
+print("СДНФ")
+print(func.__doc__)
 print("Table of truth:")
 for i in range(0, 32):
-    print(x_train[i], "=", y_train[i])
+    print(i, x_train[i], "=", y_train[i])

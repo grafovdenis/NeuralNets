@@ -32,7 +32,3 @@ def load_data(train_size=200, show=False, save=False):
     if show:
         plt.show()
     return (x_train, y_train), (x_test, y_test)
-
-
-# ---------------------------
-(x_train, y_train), (x_test, y_test) = load_data(train_size=2000, show=True, save=True)

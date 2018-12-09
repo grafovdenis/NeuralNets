@@ -70,7 +70,6 @@ def load_data(train_size=3000, show=False):
 
     plt.legend(('0 class', '1 class'), loc='upper right', shadow=True)
 
-    plt.savefig('../plots/third.png')
     if show:
         plt.show()
 
@@ -89,12 +88,3 @@ def load_data(train_size=3000, show=False):
         plt.show()
 
     return (x_train, y_train), (x_test, y_test)
-
-
-# ---------------------------
-
-(x_train, y_train), (x_test, y_test) = load_data(train_size=8000, show=True)
-print(x_train.shape)
-print(y_train.shape)
-print(x_test.shape)
-print(y_test.shape)

@@ -8,27 +8,28 @@ import numpy as np
 def is_separable(matrix):
     if matrix.sum() == 8:
         # horizontal check
-        if sum(matrix[0]) == sum(matrix[1]) or sum(matrix[2]) == sum(matrix[3]):
+        if sum(matrix[0]) == sum(matrix[1]) == 4 or sum(matrix[2]) == sum(matrix[3]) == 4:
             return True
         # vertical check
         matrix = np.matrix.transpose(matrix)
-        if sum(matrix[0]) == sum(matrix[1]) or sum(matrix[2]) == sum(matrix[3]):
+        if sum(matrix[0]) == sum(matrix[1]) == 4 or sum(matrix[2]) == sum(matrix[3]) == 4:
             return True
     return False
 
 
-y_train = np.round(np.random.rand(4, 4))
-
-while not is_separable(y_train):
+def random_matrix():
     y_train = np.round(np.random.rand(4, 4))
+    while is_separable(y_train):
+        y_train = np.round(np.random.rand(4, 4))
+    return y_train
 
-print("classes:")
-print(y_train)
 
-
-def load_data(y_train, show=False, save=False):
+def load_data(y_train=random_matrix(), show=False, save=False):
     if y_train.shape != (4, 4):
         raise TypeError("Shape can be only (4,4)")
+
+    print("classes:")
+    print(y_train)
 
     train_size = int(y_train.shape[0] * y_train.shape[1])
     x_train = np.zeros(train_size * 2)
@@ -70,8 +71,3 @@ def load_data(y_train, show=False, save=False):
     plt.close()
 
     return (x_train[::-1].reshape(train_size, 2), y_train.reshape(train_size, 1))
-
-
-# ---------------------------
-
-(x_train, y_train) = load_data(y_train, show=True, save=False)
