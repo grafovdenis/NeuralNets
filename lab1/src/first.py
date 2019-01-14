@@ -15,15 +15,19 @@ y_train = np.array([[1, 1, 0, 0],
 # load data from dataset1
 (x_train, y_train) = dataset1.load_data(y_train=y_train, show=True)
 
-
 # creating model with weights initialization
 model = Sequential()
+# we get 4 equations y(i) =  x(1,2) - 0.5 = 0
 model.add(Dense(4, input_dim=x_train.shape[1], activation=hard_lim, name='First',
-                weights=list([np.array([[0.0, 1.0, 0.0, -1.0],
+                weights=list([np.array([[0.0, 1.0, 0.0, -1.0],  # x1
                                         [1.0, 0.0, -1.0, 0.0]], dtype=float),
                               np.array([-0.5, -0.5, 0.5, 0.5], dtype=float)])))
+# we get 2 equations y1 + y2 - 1.5 = 0 and y3 + y4 - 1.5 = 0
 model.add(Dense(2, activation=hard_lim, name='Second',
-                weights=list([np.array([[1.0, 0.0], [1.0, 0.0], [0.0, 1.0], [0.0, 1.0]], dtype=float),
+                weights=list([np.array([[1.0, 0.0],  # y1
+                                        [1.0, 0.0],  # y2
+                                        [0.0, 1.0],  # y3
+                                        [0.0, 1.0]], dtype=float),
                               np.array([-1.5, -1.5], dtype=float)])))
 model.add(Dense(1, activation=hard_lim, name='Third',
                 weights=list([np.array([[1.0], [1.0]], dtype=float),
@@ -36,4 +40,3 @@ compareResult = np.array_equal(model.predict(x_train).reshape(4, 4).reshape(y_tr
 
 print("y_train == model.predict(x_train):", compareResult)
 print("result:\n", model.predict(x_train).reshape(4, 4))
-print(model.summary())

@@ -3,10 +3,11 @@
 import matplotlib.pyplot as plt
 import random as rand
 import numpy as np
+import sys
 
+sys.path.append('../..')
 
-def draw_rectangle(x, y, x1, y1, x2, y2):
-    return (x1 < x < x2) & (y1 < y < y2)
+from lib.draw import *
 
 
 def load_data(train_size=3000, show=False):
@@ -35,8 +36,7 @@ def load_data(train_size=3000, show=False):
             x_test = np.append(x_test, (x, y))
 
         # Text
-        if not draw_rectangle(x, y, 0.7, 0.2, 0.8, 0.8) | draw_rectangle(x, y, 0.1, 0.2, 0.2, 0.8) \
-               | draw_rectangle(x, y, 0.2, 0.4, 0.4, 0.6) | draw_rectangle(x, y, 0.4, 0.2, 0.5, 0.8):
+        if draw_rectangle(x, y, 0.2, 0.2, 0.6, 0.6) | draw_triangle(x, y, 0.2, 0.6, 0.4, 0.8, 0.6, 0.6):
             if i < train_size:
                 x0_train = np.append(x0_train, (x, y))
                 y_train = np.append(y_train, 1)
