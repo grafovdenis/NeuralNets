@@ -2,13 +2,13 @@ from keras import Sequential, callbacks
 from keras.layers import Dense
 from keras.optimizers import SGD
 import sys
+import numpy as np
+import matplotlib.pyplot as plt
 
 sys.path.append('../..')
 
 from lab0.src import dataset5
 import lib.gui_reporter as gr
-import numpy as np
-import matplotlib.pyplot as plt
 
 train_size = 4000
 
@@ -17,13 +17,8 @@ batch_size = 20
 epochs = 50
 verbose = 1
 
-(x_train, y_train), (x_test, y_test) = dataset5.load_data(train_size=train_size, show=False, func_type='lin', k=1,
+(x_train, y_train), (x_test, y_test) = dataset5.load_data(train_size=train_size, show=True, func_type='lin', k=1,
                                                           b=0.1)
-
-print(x_train.shape)
-print(y_train.shape)
-print(x_test.shape)
-print(y_test.shape)
 
 model = Sequential()
 
@@ -43,4 +38,21 @@ print("Accuracy on train data\t %.f%%" % (history.history['acc'][stopper.stopped
 print("Accuracy on testing data %.f%%" % (score[1] * 100))
 print("Loss on train data %.f%%" % (history.history['loss'][stopper.stopped_epoch] * 100))
 gr.plot_history_separte(history, save_path_acc="ACC.png", save_path_loss="LOSS.png",
-                        save=True, show=True)
+                        save=False, show=True)
+
+# Visualization after training
+zeros = np.zeros(int(train_size * 0.4)).reshape(x_test.shape)
+ones = np.zeros(int(train_size * 0.4)).reshape(x_test.shape)
+
+for i, el in enumerate(model.predict(x_test)):
+    if el >= 0.5:
+        ones[i] = x_test[i]
+    else:
+        zeros[i] = x_test[i]
+
+plt.xlim(0, 1.3)
+plt.ylim(0, 1)
+plt.title("After training data")
+plt.plot(zeros.transpose()[0], zeros.transpose()[1], '.')
+plt.plot(ones.transpose()[0], ones.transpose()[1], '.')
+plt.show()

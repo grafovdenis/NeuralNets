@@ -2,6 +2,8 @@ from keras import Sequential, callbacks
 from keras.layers import Dense
 from keras.optimizers import SGD
 import sys
+import numpy as np
+import matplotlib.pyplot as plt
 
 sys.path.append('../..')
 
@@ -10,7 +12,6 @@ import lib.gui_reporter as gr
 
 train_size = 4000
 
-first_layer_nur = 1
 lr = 0.3
 batch_size = 20
 epochs = 50
@@ -37,4 +38,21 @@ print("Accuracy on train data\t %.f%%" % (history.history['acc'][stopper.stopped
 print("Accuracy on testing data %.f%%" % (score[1] * 100))
 print("Loss on train data %.f%%" % (history.history['loss'][stopper.stopped_epoch] * 100))
 gr.plot_history_separte(history, save_path_acc="ACC.png", save_path_loss="LOSS.png",
-                        save=True, show=True)
+                        save=False, show=True)
+
+# Visualization after training
+zeros = np.zeros(int(train_size * 0.4)).reshape(x_test.shape)
+ones = np.zeros(int(train_size * 0.4)).reshape(x_test.shape)
+
+for i, el in enumerate(model.predict(x_test)):
+    if el >= 0.5:
+        ones[i] = x_test[i]
+    else:
+        zeros[i] = x_test[i]
+
+plt.xlim(0, 1.3)
+plt.ylim(0, 1)
+plt.title("After training data")
+plt.plot(zeros.transpose()[0], zeros.transpose()[1], '.')
+plt.plot(ones.transpose()[0], ones.transpose()[1], '.')
+plt.show()
