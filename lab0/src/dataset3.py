@@ -4,13 +4,14 @@ import matplotlib.pyplot as plt
 import random as rand
 import numpy as np
 import sys
+from sklearn.model_selection import train_test_split
 
 sys.path.append('../..')
 
 from lib.draw import *
 
 
-def load_data(train_size=3000, show=False):
+def load_data(train_size=4000, show=False):
     test_size = int(train_size * 0.2)
 
     x_train = np.empty(0)
@@ -36,7 +37,9 @@ def load_data(train_size=3000, show=False):
             x_test = np.append(x_test, (x, y))
 
         # Text
-        if draw_rectangle(x, y, 0.2, 0.2, 0.6, 0.6) | draw_triangle(x, y, 0.2, 0.6, 0.4, 0.8, 0.6, 0.6):
+        if (draw_rectangle(x, y, 0.2, 0.2, 0.6, 0.6) | draw_triangle(x, y, 0.2, 0.6, 0.4, 0.8, 0.6, 0.6)) \
+                and not draw_rectangle(x, y, 0.25, 0.35, 0.35, 0.45) \
+                and not draw_rectangle(x, y, 0.45, 0.35, 0.55, 0.45):
             if i < train_size:
                 x0_train = np.append(x0_train, (x, y))
                 y_train = np.append(y_train, 1)
