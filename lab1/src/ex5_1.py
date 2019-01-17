@@ -7,16 +7,23 @@ sys.path.append('../..')
 
 from lab0.src import dataset5
 import lib.gui_reporter as gr
+import numpy as np
+import matplotlib.pyplot as plt
 
 train_size = 4000
 
-first_layer_nur = 1
 lr = 0.3
 batch_size = 20
 epochs = 50
 verbose = 1
 
-(x_train, y_train), (x_test, y_test) = dataset5.load_data(train_size=train_size, show=True, func_type='lin', k=1, b=0.1)
+(x_train, y_train), (x_test, y_test) = dataset5.load_data(train_size=train_size, show=False, func_type='lin', k=1,
+                                                          b=0.1)
+
+print(x_train.shape)
+print(y_train.shape)
+print(x_test.shape)
+print(y_test.shape)
 
 model = Sequential()
 
