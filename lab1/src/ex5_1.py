@@ -17,8 +17,8 @@ batch_size = 20
 epochs = 50
 verbose = 1
 
-(x_train, y_train), (x_test, y_test) = dataset5.load_data(train_size=train_size, show=True, func_type='lin', k=1,
-                                                          b=0.1)
+(x_train, y_train), (x_test, y_test) = dataset5.load_data_classes(train_size=train_size, show=True, func_type='lin', k=1,
+                                                                  b=0.1)
 
 model = Sequential()
 
