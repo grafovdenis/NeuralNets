@@ -1,52 +1,56 @@
 # Eight dataset
-# Fetch data from CIFAR-10 dataset (consists of 60000 32x32 colour images in 10 classes, with 6000 images per class.)
-
 import keras
 import matplotlib.pyplot as plt
-import numpy as np
+import sys
 
-(X_train, y_train), (X_test, y_test) = keras.datasets.cifar10.load_data()
+sys.path.append("../..")
 
-class_names = {'[0]': 'airplane', '[1]': 'automobile', '[2]': 'bird', '[3]': 'cat', '[4]': 'deer',
-               '[5]': 'dog', '[6]': 'frog', '[7]': 'horse', '[8]': 'ship', '[9]': 'truck'}
-
-# convert class vectors to binary vectors
-Y_train = keras.utils.np_utils.to_categorical(y_train)
-Y_test = keras.utils.np_utils.to_categorical(y_test)
-
-print('X_train shape:', X_train.shape)
-print('Y_train shape:', Y_train.shape)
-print('X_test shape:', X_test.shape)
-print('Y_test shape:', Y_test.shape)
-
-# normalize inputs from 0-255 to 0.0-1.0
-X_train = X_train.astype('float32')
-X_test = X_test.astype('float32')
-X_train = X_train / 255.0
-X_test = X_test / 255.0
+from lib.image import *
 
 
-def grayscale(data, dtype='float32'):
-    # luma coding weighted average in video systems
-    r, g, b = np.asarray(.3, dtype=dtype), np.asarray(.59, dtype=dtype), np.asarray(.11, dtype=dtype)
-    rst = r * data[:, :, :, 0] + g * data[:, :, :, 1] + b * data[:, :, :, 2]
-    # add channel dimension
-    rst = np.expand_dims(rst, axis=3)
-    return rst
+def load_data(mode=0, show=False, show_indexes=[0]):
+    """
+    mode = 0 - normal images
+    mode = 1 - deformed images
+    mode = 2 - noised images
+    """
+    if not [0, 1, 2].__contains__(mode):
+        Exception("Unexpected mode value")
 
+    (x_train, y_train), (x_test, y_test) = keras.datasets.mnist.load_data()
 
-X_train_gray = grayscale(X_train)
-X_test_gray = grayscale(X_test)
-print("X_train_gray shape:", X_train_gray.shape)
-print("X_test_gray shape:", X_test_gray.shape)
+    print('x_train shape:', x_train.shape)
+    print('y_train shape:', y_train.shape)
+    print('x_test shape:', x_test.shape)
+    print('y_test shape:', y_test.shape)
 
-# now we have only one channel in the images
-# plot a randomly chosen image
-img = 0
-plt.figure(figsize=(4, 2))
-print(class_names[str(y_train[img])], "displayed")
-plt.subplot(1, 2, 1)
-plt.imshow(X_train[img], interpolation='none')
-plt.subplot(1, 2, 2)
-plt.imshow(X_train_gray[img, :, :, 0], cmap=plt.get_cmap('gray'), interpolation='none')
-plt.show()
+    if mode == 1:
+        for i in range(0, 60000):
+            x_train[i] = deform_image(x_train[i], (28, 28), 0.3, 0, 28)
+        for i in range(0, 10000):
+            x_test[i] = deform_image(x_test[i], (28, 28), 0.3, 0, 28)
+
+    resolution = x_train.shape[1]
+
+    x_train = x_train.reshape(x_train.shape[0], resolution ** 2)
+    x_test = x_test.reshape(x_test.shape[0], resolution ** 2)
+
+    if mode == 2:
+        for i in range(0, 60000):
+            x_train[i] = noise(x_train[i], 2000)
+        for i in range(0, 10000):
+            x_test[i] = noise(x_test[i], 2000)
+
+    # normalize inputs from 0-255 to 0.0-1.0
+    x_train = x_train.astype('float32')
+    x_test = x_test.astype('float32')
+    x_train = x_train / 255.0
+    x_test = x_test / 255.0
+
+    if show:
+        for i in show_indexes:
+            plt.imshow(x_train[i].reshape(resolution, resolution))
+            plt.show()
+            plt.close()
+
+    return (x_train, y_train), (x_test, y_test)

@@ -16,7 +16,48 @@ def non_linear(x, y, k, b):
     return k * np.sin(x + b) - y > 0
 
 
-def load_data(train_size, k=1, b=0, show=False, func_type='lin'):
+def func(x, k, b, func_type):
+    if func_type == 'own':
+        return np.abs(np.sin(5 * x) * np.cos(20 * np.pi * x) * np.arctan(x - 1) - 0.5) * 0.6 + 0.2
+    elif func_type == 'lin':
+        return k * x + b
+    else:
+        return k * np.sin(x + b)
+
+
+def load_data(train_size, k=1, b=0, show=False, func_type='own'):
+    test_size = int(train_size * 0.2)
+
+    x_train = np.empty(0)
+    y_train = np.empty(0)
+
+    x_test = np.empty(0)
+    y_test = np.empty(0)
+
+    i = 0
+    for x in np.random.rand((train_size + test_size)):
+        if i % 5 == 0:
+            x_test = np.append(x_test, x)
+            y_test = np.append(y_test, func(x=x, k=k, b=b, func_type=func_type))
+        else:
+            x_train = np.append(x_train, x)
+            y_train = np.append(y_train, func(x=x, k=k, b=b, func_type=func_type))
+        i += 1
+
+    plt.xlim(0, 1)
+    plt.ylim(0, 1)
+    plt.plot(x_train, y_train, '.')
+    plt.plot(x_test, y_test, '.')
+    plt.title("Approximating function")
+    plt.legend(('train_data', 'test_data'), loc='upper left', shadow=True)
+    if show:
+        plt.show()
+    plt.close()
+
+    return (x_train, y_train), (x_test, y_test)
+
+
+def load_data_classes(train_size=2000, k=1, b=0, show=False, func_type='lin'):
     test_size = int(train_size * 0.2)
 
     x_train = np.empty(0)
