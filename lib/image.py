@@ -1,4 +1,5 @@
 import numpy as np
+import keras.preprocessing.image as kimage
 
 
 def deform_image(arr, shape, k, n, m):
@@ -33,3 +34,7 @@ def grayscale(data, dtype='float32'):
     # add channel dimension
     rst = np.expand_dims(rst, axis=3)
     return rst
+
+
+def get_pxs(path):
+    return kimage.img_to_array(kimage.load_img(path, color_mode="grayscale"))
